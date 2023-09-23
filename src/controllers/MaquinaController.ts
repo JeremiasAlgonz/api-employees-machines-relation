@@ -1,9 +1,6 @@
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 
-//imoporta o date-fns -> Uma biblioteca de manipulação de datas
-import { format, parseISO } from 'date-fns';
-
 class MaquinaController {
     async index(req: Request, res: Response) {
         const prisma = new PrismaClient();

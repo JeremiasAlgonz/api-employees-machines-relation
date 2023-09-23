@@ -48,3 +48,12 @@ model Tipo {
 
   @@map("Tipo")
 }
+
+model Usuario {
+  id               Int           @id @default(autoincrement()) 
+  email            String        @db.VarChar(100) @unique
+  senha            String        @db.VarChar(100)
+
+  @@map("Usuario")
+}
+
