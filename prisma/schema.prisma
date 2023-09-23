@@ -1,0 +1,50 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Funcionario {
+  id          Int           @id @default(autoincrement())
+  nome        String        @db.VarChar(100)
+  salario     Decimal       @db.Decimal(12,2)
+  cpf         Decimal       @db.Decimal(11,0) @unique
+
+  //Funcionario tem acesso a varias maquinas (N -> N)
+  maquinas Maquina[]
+
+  @@map("Funcionarios")      
+
+}
+
+model Maquina {
+  id          Int           @id @default(autoincrement())
+  potencia    Decimal       @db.Decimal(5,1)
+  producao    Int
+  dataCompra  DateTime?     @default(now())
+  
+  // Associação com Tipo da Máquina é de uma única Categoria (N -> 1)
+  tipoId      Int
+  tipo        Tipo          @relation(fields: [tipoId], references: [id])
+
+  //Uma máquina tem vários operadores (N -> N)
+  operadores  Funcionario[]
+  
+  @@map("Maquina")
+}
+
+model Tipo {
+  id               Int           @id @default(autoincrement())
+  descricao        String        @db.VarChar(150)
+
+  //Muitas máquinas podem ser de um mesmo tipo (1 -> N)
+  maquinas         Maquina[]
+
+  @@map("Tipo")
+}
